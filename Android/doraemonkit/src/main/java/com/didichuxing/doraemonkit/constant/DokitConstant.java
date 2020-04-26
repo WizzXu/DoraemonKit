@@ -27,7 +27,7 @@ import java.util.Map;
  * ================================================
  */
 public class DokitConstant {
-    public static boolean IS_HOOK = false;
+    public static boolean IS_HOOK = true;
 
     /**
      * 产品id

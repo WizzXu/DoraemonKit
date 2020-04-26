@@ -118,6 +118,7 @@ public class JsonItemView extends LinearLayout {
 
     public void setIconClickListener(OnClickListener listener) {
         mIvIcon.setOnClickListener(listener);
+        listener.onClick(mIvIcon);
     }
 
     public void addViewNoInvalidate(View child) {

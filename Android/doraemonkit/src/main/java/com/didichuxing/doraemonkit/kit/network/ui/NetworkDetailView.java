@@ -17,11 +17,13 @@ import com.didichuxing.doraemonkit.kit.network.bean.NetworkRecord;
 import com.didichuxing.doraemonkit.kit.network.bean.Request;
 import com.didichuxing.doraemonkit.kit.network.bean.Response;
 import com.didichuxing.doraemonkit.kit.network.utils.ByteUtil;
+import com.didichuxing.doraemonkit.util.JsonUtil;
 import com.didichuxing.doraemonkit.view.jsonviewer.JsonRecyclerView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -104,10 +106,17 @@ public class NetworkDetailView extends LinearLayout {
             size.setText(ByteUtil.getPrintSize(record.requestLength));
             try {
                 String strBody = TextUtils.isEmpty(request.postData) ? "NULL" : request.postData;
-                strBody = URLDecoder.decode(strBody, "utf-8");
-                body.setText(strBody);
-            } catch (Exception e) {
-                body.setText(TextUtils.isEmpty(request.postData) ? "NULL" : request.postData);
+                new JSONObject(strBody);
+                body.setText(JsonUtil.jsonFormat(strBody));
+                return;
+            } catch (JSONException e) {
+                try {
+                    String strBody = TextUtils.isEmpty(request.postData) ? "NULL" : request.postData;
+                    strBody = URLDecoder.decode(strBody, "utf-8");
+                    body.setText(strBody);
+                } catch (Exception e1) {
+                    body.setText(TextUtils.isEmpty(request.postData) ? "NULL" : request.postData);
+                }
             }
         }
     }

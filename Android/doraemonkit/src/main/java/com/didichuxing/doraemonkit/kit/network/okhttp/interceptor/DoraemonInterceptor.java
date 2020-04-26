@@ -20,6 +20,7 @@ import com.didichuxing.doraemonkit.util.LogHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import okhttp3.Interceptor;
@@ -27,6 +28,8 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.BufferedSource;
 
 /**
  * 抓包拦截器
@@ -74,7 +77,15 @@ public class DoraemonInterceptor implements Interceptor {
                 requestId,
                 request,
                 response);
+
+        ResponseBody responseBody = response.body();
+        BufferedSource source = responseBody.source();
+        source.request(Long.MAX_VALUE); // request the entire body.
+        Buffer buffer = source.buffer();
+        String responseBodyString = buffer.clone().readString(Charset.forName("UTF-8"));
+
         mNetworkInterpreter.fetchResponseInfo(record, inspectorResponse);
+        mNetworkInterpreter.fetchResponseBody(record, responseBodyString);
 
         ResponseBody body = response.body();
         InputStream responseStream = null;
