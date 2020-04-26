@@ -32,7 +32,9 @@ public class DoraemonKit {
     public static void install(final Application app, List<AbstractKit> selfKits, String productId) {
         APPLICATION = app;
         try {
+            DoraemonKitReal.IS_HOOK = true;
             DoraemonKitReal.install(app, selfKits, productId);
+            DoraemonKit.disableUpload();
         } catch (Exception e) {
             e.printStackTrace();
         }

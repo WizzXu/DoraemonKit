@@ -94,7 +94,7 @@ class DoraemonKitReal {
     /**
      * 用来判断是否接入了dokit插件 如果安装了插件会动态修改这个值为true
      */
-    private static boolean IS_HOOK = false;
+    static boolean IS_HOOK = false;
 
 
     static void setDebug(boolean debug) {
