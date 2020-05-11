@@ -2,6 +2,7 @@ package com.didichuxing.doraemonkit.kit.network.okhttp.interceptor;
 
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.didichuxing.doraemonkit.constant.DokitConstant;
 import com.didichuxing.doraemonkit.kit.network.NetworkManager;
@@ -12,6 +13,8 @@ import com.didichuxing.doraemonkit.kit.network.core.NetworkInterpreter;
 import com.didichuxing.doraemonkit.kit.network.core.RequestBodyHelper;
 import com.didichuxing.doraemonkit.kit.network.core.ResourceType;
 import com.didichuxing.doraemonkit.kit.network.core.ResourceTypeHelper;
+import com.didichuxing.doraemonkit.kit.network.mock.ApiInterfaceListResponse;
+import com.didichuxing.doraemonkit.kit.network.mock.MockUtil;
 import com.didichuxing.doraemonkit.kit.network.okhttp.ForwardingResponseBody;
 import com.didichuxing.doraemonkit.kit.network.okhttp.InterceptorUtil;
 import com.didichuxing.doraemonkit.kit.network.okhttp.OkHttpInspectorRequest;
@@ -21,7 +24,9 @@ import com.didichuxing.doraemonkit.util.LogHelper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -41,12 +46,25 @@ public class DoraemonInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
+        Request request = chain.request();
+        if (MockUtil.getInstance().isOpen() &&
+                MockUtil.getInstance().interfaceInfoConcurrentHashMap.get(request.url().url().getPath()) != null
+                && "undone".equals(MockUtil.getInstance().interfaceInfoConcurrentHashMap.get(request.url().url().getPath()).getStatus())) {
+            Log.d("--->", "获取mock数据" + request.url().url().getPath());
+            StringBuffer sb = new StringBuffer();
+            sb.append(MockUtil.getInstance().getUrl());
+            sb.append(MockUtil.getInstance().getProjectSpace());
+            sb.append(request.url().url().getPath());
+            String params = MockUtil.getInstance().interfaceInfoConcurrentHashMap.get(request.url().url().getPath()).getParams();
+            sb.append("?");
+            sb.append(params);
+            request = request.newBuilder().url(sb.toString()).method("GET", null).build();
+        }
+
         if (!NetworkManager.isActive()) {
-            Request request = chain.request();
             return chain.proceed(request);
         }
 
-        Request request = chain.request();
         Response response = chain.proceed(request);
 
         String strContentType = response.header("Content-Type");

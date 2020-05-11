@@ -46,6 +46,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
 
+        <activity
+            android:name=".kit.network.mock.view.MockConfigActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
+
         <provider
             android:name=".DebugFileProvider"
             android:authorities="${applicationId}.debugfileprovider"

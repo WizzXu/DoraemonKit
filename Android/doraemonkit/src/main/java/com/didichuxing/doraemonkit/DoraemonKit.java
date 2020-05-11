@@ -21,7 +21,7 @@ public class DoraemonKit {
     }
 
     public static void install(Application app, List<AbstractKit> selfKits) {
-        install(app, selfKits, "");
+        install(app, selfKits, "", "", "", "");
     }
 
     /**
@@ -29,11 +29,13 @@ public class DoraemonKit {
      * @param selfKits  自定义kits
      * @param productId Dokit平台端申请的productId
      */
-    public static void install(final Application app, List<AbstractKit> selfKits, String productId) {
+    public static void install(final Application app, List<AbstractKit> selfKits,
+                               String productId, String mockUrlStr,
+                               String tokenStr, String projectId) {
         APPLICATION = app;
         try {
             DoraemonKitReal.IS_HOOK = true;
-            DoraemonKitReal.install(app, selfKits, productId);
+            DoraemonKitReal.install(app, selfKits, productId, mockUrlStr, tokenStr, projectId);
             DoraemonKit.disableUpload();
         } catch (Exception e) {
             e.printStackTrace();

@@ -42,6 +42,7 @@ import com.didichuxing.doraemonkit.kit.loginfo.LogInfoKit;
 import com.didichuxing.doraemonkit.kit.methodtrace.MethodCostKit;
 import com.didichuxing.doraemonkit.kit.mode.FloatModeKit;
 import com.didichuxing.doraemonkit.kit.network.MockKit;
+import com.didichuxing.doraemonkit.kit.network.MyMockKit;
 import com.didichuxing.doraemonkit.kit.network.NetworkKit;
 import com.didichuxing.doraemonkit.kit.network.NetworkManager;
 import com.didichuxing.doraemonkit.kit.parameter.cpu.CpuKit;
@@ -107,7 +108,7 @@ class DoraemonKitReal {
     }
 
     static void install(Application app, List<AbstractKit> selfKits) {
-        install(app, selfKits, "");
+        install(app, selfKits, "", "", "", "");
     }
 
     /**
@@ -115,7 +116,8 @@ class DoraemonKitReal {
      * @param selfKits  自定义kits
      * @param productId Dokit平台端申请的productId
      */
-    static void install(final Application app, List<AbstractKit> selfKits, String productId) {
+    static void install(final Application app, List<AbstractKit> selfKits, String productId, String mockUrlStr,
+                        String tokenStr, String projectId) {
         DokitConstant.PRODUCT_ID = productId;
         DokitConstant.APP_HEALTH_RUNNING = GlobalConfig.getAppHealth(DoraemonKit.APPLICATION);
         //添加常用工具
@@ -221,7 +223,8 @@ class DoraemonKitReal {
         ui.add(new ViewCheckerKit());
         ui.add(new LayoutBorderKit());
         //新增数据mock工具 由于Dokit管理平台还没完善 所以暂时关闭入口
-        platform.add(new MockKit());
+        //platform.add(new MockKit());
+        platform.add(new MyMockKit(mockUrlStr, tokenStr, projectId));
         platform.add(new HealthKit());
 
         //增加浮标模式

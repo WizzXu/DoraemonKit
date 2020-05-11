@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply from: 'upload.gradle'
+apply from: 'uploadLocal.gradle'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -63,7 +63,7 @@ dependencies {
     implementation rootProject.ext.dependencies["brvah"]
     implementation rootProject.ext.dependencies["easy_refresh_layout"]
     //implementation rootProject.ext.dependencies["okgo"]
-    implementation rootProject.ext.dependencies["okhttp"]
+    api rootProject.ext.dependencies["okhttp"]
     //implementation rootProject.ext.dependencies["okio"]
     implementation rootProject.ext.dependencies["room_runtime"]
     annotationProcessor rootProject.ext.dependencies["room_compile"]
