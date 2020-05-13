@@ -30,6 +30,9 @@ public class DoraemonKit {
 
     }
 
+    public static void install(Application app, List<AbstractKit> selfKits, String productId, String mockUrlStr, String tokenStr, String projectId) {}
+
+
 
     public static void setWebDoorCallback(WebDoorManager.WebDoorCallback callback) {
     }
